@@ -1,8 +1,8 @@
 output "us_west_2_ips" {
-  value = module.us-west-2.ips
+  value = module.us-west-2-mongo.ips
 }
 output "ap_southeast_1_ips" {
-  value = module.ap-southeast-1.ips
+  value = module.ap-southeast-1-mongo.ips
 }
 
 # output "eu_west_2_ips" {
@@ -14,7 +14,7 @@ output "inventory" {
       children = {
         "us-west-2" = {
           hosts = {
-            for i, ip in module.us-west-2.ips : "us-west-2_${i}" => {
+            for i, ip in module.us-west-2-mongo.ips : "us-west-2_${i}" => {
               ansible_host                 = ip["public"]
               ansible_ssh_private_key_file = var.us_west_2_private_key
               ec2_private_ip               = ip["private"]
@@ -22,19 +22,9 @@ output "inventory" {
           }
         }
 
-        # "eu-west-2" = {
-        #   hosts = {
-        #     for i, ip in module.eu-west-2.ips : "eu-west-2_${i}" => {
-        #       ansible_host                 = ip["public"]
-        #       ansible_ssh_private_key_file = var.eu_west_2_private_key
-        #       ec2_private_ip               = ip["private"]
-        #     }
-        #   }
-        # }
-
         "ap-southeast-1" = {
           hosts = {
-            for i, ip in module.ap-southeast-1.ips : "ap-southeast-1_${i}" => {
+            for i, ip in module.ap-southeast-1-mongo.ips : "ap-southeast-1_${i}" => {
               ansible_host                 = ip["public"]
               ansible_ssh_private_key_file = var.ap_southeast_1_private_key
               ec2_private_ip               = ip["private"]
@@ -44,19 +34,16 @@ output "inventory" {
 
         "config-server" = {
           hosts = {
-            "us-west-2_0" = null
-            # "eu-west-2_0"      = null
+            "us-west-2_0"      = null
             "ap-southeast-1_0" = null
           }
         }
 
         "shard" = {
           hosts = {
-            "us-west-2_1" = null
-            # "eu-west-2_1"      = null
+            "us-west-2_1"      = null
             "ap-southeast-1_1" = null
             "us-west-2_2"      = null
-            # "eu-west-2_2"      = null
             "ap-southeast-1_2" = null
           }
         }

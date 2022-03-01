@@ -17,3 +17,11 @@ output "subnet" {
     aws_subnet.subnet
   ]
 }
+
+output "subnet_2" {
+  value = aws_subnet.subnet_2
+
+  depends_on = [
+    aws_subnet.subnet_2
+  ]
+}

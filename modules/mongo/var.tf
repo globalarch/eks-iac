@@ -45,3 +45,7 @@ variable "peer_vpc_cidr" {
   type    = string
   default = null
 }
+
+variable "private_ips" {
+  default = {}
+}

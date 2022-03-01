@@ -29,7 +29,7 @@ provider "aws" {
   alias  = "eu-west-2"
 }
 
-module "us-west-2" {
+module "us-west-2-mongo" {
   source            = "./modules/mongo"
   ec2_key_name      = var.us_west_2_ec2_key_name
   ec2_count         = 3
@@ -38,13 +38,14 @@ module "us-west-2" {
   vpc_id            = module.us-west-2-infra.vpc.id
   vpc_cidr          = var.US_vpc
   peer_vpc_cidr     = var.SGP_vpc
+  private_ips       = var.US_mongo_private_ips
 
   providers = {
     aws = aws.us-west-2
   }
 }
 
-module "ap-southeast-1" {
+module "ap-southeast-1-mongo" {
   source            = "./modules/mongo"
   ec2_key_name      = var.ap_southeast_1_ec2_key_name
   ec2_count         = 3
@@ -53,23 +54,12 @@ module "ap-southeast-1" {
   vpc_id            = module.ap-southeast-1-infra.vpc.id
   vpc_cidr          = var.SGP_vpc
   peer_vpc_cidr     = var.US_vpc
+  private_ips       = var.SGP_mongo_private_ips
 
   providers = {
     aws = aws.ap-southeast-1
   }
 }
-
-# module "eu-west-2" {
-#   source            = "./modules/mongo"
-#   ec2_key_name      = var.eu_west_2_ec2_key_name
-#   ec2_count         = 3
-#   ec2_instance_type = "t2.micro"
-#   vpc_id = module.ap-southeast-1-infra.vpc.id
-
-#   providers = {
-#     aws = aws.eu-west-2
-#   }
-# }
 
 module "us-west-2-eks" {
   source       = "./modules/eks"

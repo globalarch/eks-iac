@@ -35,7 +35,8 @@ locals {
 }
 
 resource "aws_instance" "mongo" {
-  count = var.ec2_count
+  count      = var.ec2_count
+  private_ip = var.private_ips[count.index]
 
   ami           = local.ec2_ami
   instance_type = var.ec2_instance_type

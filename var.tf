@@ -27,6 +27,15 @@ variable "US_private_subnet" {
   type    = string
   default = "10.1.1.0/24"
 }
+variable "US_mongo_private_ips" {
+  default = {
+    "0" = "10.1.1.20"
+    "1" = "10.1.1.21"
+    "2" = "10.1.1.22"
+    "3" = "10.1.1.23"
+    "4" = "10.1.1.24"
+  }
+}
 
 variable "US_private_subnet_2" {
   type    = string
@@ -41,6 +50,16 @@ variable "US_nginx" {
 variable "SGP_private_subnet" {
   type    = string
   default = "10.2.1.0/24"
+}
+
+variable "SGP_mongo_private_ips" {
+  default = {
+    "0" = "10.2.1.20"
+    "1" = "10.2.1.21"
+    "2" = "10.2.1.22"
+    "3" = "10.2.1.23"
+    "4" = "10.2.1.24"
+  }
 }
 
 variable "SGP_private_subnet_2" {
