@@ -29,7 +29,7 @@ module "eks" {
     default = {
       name                   = "default-node-group"
       create_launch_template = false
-      launch_template_name   = ""
+      launch_template_name   = "" 
 
       min_size     = 2
       max_size     = 5
