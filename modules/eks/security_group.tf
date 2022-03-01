@@ -1,7 +1,7 @@
 resource "aws_security_group" "cluster" {
   name        = "EKS cluster - allow all"
   description = "Allow all"
-  vpc_id      = aws_vpc.eks.id
+  vpc_id      = var.vpc_id
 
   ingress {
     description      = "allow all"
@@ -25,7 +25,7 @@ resource "aws_security_group" "cluster" {
 resource "aws_security_group" "node" {
   name        = "EKS node - allow all"
   description = "Allow all"
-  vpc_id      = aws_vpc.eks.id
+  vpc_id      = var.vpc_id
 
   ingress {
     description      = "allow all"

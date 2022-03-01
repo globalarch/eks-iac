@@ -1,0 +1,36 @@
+---
+  - hosts: config-server
+    remote_user: root
+    become: yes
+    tasks:
+      - name: Ensure MongoDB stopped
+        ansible.builtin.service:
+          name: mongod
+          state: stopped
+      - name: Read setting yaml
+        ansible.builtin.slurp:
+          path: /etc/mongod.conf
+        register: mongo_conf
+      - name: Extract data from config
+        ansible.builtin.set_fact:
+          mongo_yaml: "{{ mongo_conf['content'] | b64decode | from_yaml }}"
+      - name: Edit config
+        ansible.utils.update_fact:
+          updates:
+            - path: mongo_yaml.sharding
+              value:
+                clusterRole: configsvr
+            - path: mongo_yaml.replication
+              value:
+                replSetName: config-server
+            - path: mongo_yaml.net.port
+              value: 27019
+        register: updated_conf
+      - name: Write config
+        ansible.builtin.copy:
+          content: "{{ updated_conf['mongo_yaml'] | to_nice_yaml }}"
+          dest: /etc/mongod.conf
+      - name: Ensure MongoDB started
+        ansible.builtin.service:
+          name: mongod
+          state: started

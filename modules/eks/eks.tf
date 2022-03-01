@@ -1,6 +1,3 @@
-resource "aws_vpc" "eks" {
-  cidr_block = "10.0.0.0/16"
-}
 module "eks" {
   source = "terraform-aws-modules/eks/aws"
 
@@ -25,12 +22,12 @@ module "eks" {
     }
   }
 
-  vpc_id     = aws_vpc.eks.id
-  subnet_ids = [aws_subnet.eks1.id, aws_subnet.eks2.id]
+  vpc_id     = var.vpc_id
+  subnet_ids = [var.subnet_id, var.subnet_id_2]
 
   eks_managed_node_groups = {
     default = {
-      name = "default-node-group"
+      name                   = "default-node-group"
       create_launch_template = false
       launch_template_name   = ""
 

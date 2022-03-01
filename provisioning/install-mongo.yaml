@@ -1,0 +1,48 @@
+---
+  - hosts: all
+    remote_user: root
+    become: yes
+    tasks:
+      - name: Add Apt Key
+        ansible.builtin.apt_key:
+          url: https://www.mongodb.org/static/pgp/server-5.0.asc
+          state: present
+      - name: Add Apt Repo
+        ansible.builtin.apt_repository:
+          repo: deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/5.0 multiverse
+          filename: mongodb-org-5.0
+          state: present
+      - name: Install MongoDB
+        ansible.builtin.apt:
+          name: mongodb-org
+          update_cache: yes
+          state: present
+      - name: Stop MongoDB
+        ansible.builtin.service:
+          name: mongod
+          enabled: yes
+          state: stopped
+      - name: Change mongodata permission
+        file:
+          path: /mongodata 
+          owner: "mongodb"
+          group: "mongodb"
+      - name: Read setting yaml
+        ansible.builtin.slurp:
+          path: /etc/mongod.conf
+        register: mongo_conf
+      - name: Extract data from config
+        ansible.builtin.set_fact:
+          mongo_yaml: "{{ mongo_conf['content'] | b64decode | from_yaml }}"
+      - name: Edit config
+        ansible.utils.update_fact:
+          updates:
+            - path: mongo_yaml.net.bindIp
+              value: "localhost,{{ hostvars[inventory_hostname]['ec2_private_ip'] }}"
+            - path: mongo_yaml.storage.dbPath
+              value: /mongodata/
+        register: updated_conf
+      - name: Write config
+        ansible.builtin.copy:
+          content: "{{ updated_conf['mongo_yaml'] | to_nice_yaml }}"
+          dest: /etc/mongod.conf

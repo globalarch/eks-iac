@@ -1,0 +1,18 @@
+[Unit]
+Description=MongoDB Router
+Documentation=https://docs.mongodb.org/manual
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=mongodb
+Group=mongodb
+ExecStart=/usr/bin/mongos -f /etc/mongos.conf
+ExecStartPre=+/usr/bin/mkdir -p /var/run/mongodb
+ExecStartPre=+/usr/bin/chown mongodb:mongodb /var/run/mongodb
+ExecStartPre=+/usr/bin/chmod 0755 /var/run/mongodb
+PIDFile=/var/run/mongodb/mongos.pid
+Type=forking
+
+[Install]
+WantedBy=multi-user.target

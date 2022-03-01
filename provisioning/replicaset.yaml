@@ -1,0 +1,58 @@
+---
+  # - hosts: config-server
+  #   become: yes
+  #   tasks:
+  #     - name: debug
+  #       debug:
+  #         msg: "{{ groups['config-server'] | map('extract', hostvars) | map(attribute='ec2_private_ip') | map('regex_replace', '^(.*)$', '\\1:27019') }}"
+  - hosts: config-server[0]
+    become: yes
+    tasks:
+      - name: Install pymongo
+        ansible.builtin.pip:
+          name: pymongo
+      - name: Ensure replicaset
+        community.mongodb.mongodb_replicaset:
+          replica_set: config-server
+          login_port: 27019
+          members: "{{ groups['config-server'] |
+                       map('extract', hostvars) |
+                       map(attribute='ec2_private_ip') |
+                       map('regex_replace', '^(.*)$', '\\1:27019') |
+                       join(',') }}"
+          # TODO: use validation (by having an odd number of replicas)
+          validate: no
+  - hosts: us-west-2[1]
+    become: yes
+    tasks:
+      - name: Install pymongo
+        ansible.builtin.pip:
+          name: pymongo
+      - name: Ensure replicaset
+        community.mongodb.mongodb_replicaset:
+          replica_set: us-west-2
+          login_port: 27018
+          members: "{{ groups['us-west-2'][1:] |
+                       map('extract', hostvars) |
+                       map(attribute='ec2_private_ip') |
+                       map('regex_replace', '^(.*)$', '\\1:27018') |
+                       join(',') }}"
+          # TODO: use validation (by having an odd number of replicas)
+          validate: no
+  - hosts: ap-southeast-1[1]
+    become: yes
+    tasks:
+      - name: Install pymongo
+        ansible.builtin.pip:
+          name: pymongo
+      - name: Ensure replicaset
+        community.mongodb.mongodb_replicaset:
+          replica_set: ap-southeast-1
+          login_port: 27018
+          members: "{{ groups['ap-southeast-1'][1:] |
+                       map('extract', hostvars) |
+                       map(attribute='ec2_private_ip') |
+                       map('regex_replace', '^(.*)$', '\\1:27018') |
+                       join(',') }}"
+          # TODO: use validation (by having an odd number of replicas)
+          validate: no

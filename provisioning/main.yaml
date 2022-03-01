@@ -1,0 +1,13 @@
+---
+  - name: Install MongoDB
+    import_playbook: install-mongo.yaml
+  - name: Setup Config Server
+    import_playbook: config-server.yaml
+  - name: Setup Shard
+    import_playbook: shard.yaml
+  - name: Initiate Replica Set
+    import_playbook: replicaset.yaml
+  - name: Initiate Cluster
+    import_playbook: mongos.yaml
+  - name: Add Sharding to the Cluster
+    import_playbook: add-to-shard.yaml

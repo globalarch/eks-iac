@@ -1,0 +1,30 @@
+---
+  - hosts: us-west-2[1]
+    become: yes
+    tasks:
+      - name: Install pymongo
+        ansible.builtin.pip:
+          name: pymongo
+      - name: Ensure sharding
+        community.mongodb.mongodb_shard:
+          login_port: 27017
+          shard: "us-west-2/{{ groups['us-west-2'][1:] |
+                               map('extract', hostvars) |
+                               map(attribute='ec2_private_ip') |
+                               map('regex_replace', '^(.*)$', '\\1:27018') |
+                               join(',') }}"
+          state: present
+  - hosts: ap-southeast-1[1]
+    become: yes
+    tasks:
+      - name: Install pymongo
+        ansible.builtin.pip:
+          name: pymongo
+      - name: Ensure sharding
+        community.mongodb.mongodb_shard:
+          login_port: 27017
+          shard: "ap-southeast-1/{{ groups['ap-southeast-1'][1:] |
+                               map('extract', hostvars) |
+                               map(attribute='ec2_private_ip') |
+                               map('regex_replace', '^(.*)$', '\\1:27018') |
+                               join(',') }}"

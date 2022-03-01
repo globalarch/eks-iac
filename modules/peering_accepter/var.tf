@@ -1,14 +1,14 @@
-variable "cluster_name" {
+variable "us_cidr" {
   type    = string
   default = null
 }
 
-variable "subnet_id" {
+variable "vpc_peering_connection_id" {
   type    = string
   default = null
 }
 
-variable "vpc_id" {
+variable "route_table_id" {
   type    = string
   default = null
 }

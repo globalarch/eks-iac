@@ -1,0 +1,34 @@
+---
+  - hosts: shard
+    remote_user: root
+    become: yes
+    vars:
+      mongos_conf_bindIp: "localhost,{{ hostvars[inventory_hostname]['ec2_private_ip'] }}"
+      mongos_conf_configDB: "config-server/{{ groups['config-server'] |
+                                              map('extract', hostvars) |
+                                              map(attribute='ec2_private_ip') |
+                                              map('regex_replace', '^(.*)$', '\\1:27019') |
+                                              join(',') }}"
+    tasks:
+      - name: Create mongos configuration file
+        ansible.builtin.template:
+          src: templates/mongos.conf.j2
+          dest: /etc/mongos.conf
+          owner: mongodb
+          group: mongodb
+          mode: 0644
+      - name: Create systemd service file
+        ansible.builtin.template:
+          src: templates/mongos.service.j2
+          dest: /usr/lib/systemd/system/mongos.service
+          owner: root
+          group: root
+          mode: 0755
+      - name: Reload systemd
+        ansible.builtin.systemd:
+          daemon_reload: yes
+      - name: Ensure start mongos
+        ansible.builtin.service:
+          name: mongos
+          enabled: yes
+          state: restarted

@@ -1,0 +1,13 @@
+systemLog:
+  destination: file
+  logAppend: true
+  path: /var/log/mongodb/mongos.log
+processManagement:
+  fork: true
+  pidFilePath: /var/run/mongodb/mongos.pid
+  timeZoneInfo: /usr/share/zoneinfo
+net:
+  bindIp: {{ mongos_conf_bindIp }}
+  port: 27017
+sharding:
+  configDB: {{ mongos_conf_configDB }}
