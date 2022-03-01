@@ -1,9 +1,4 @@
-variable "subnet_ids" {
-  type    = list(any)
-  default = null
-}
-
-variable "vpc_id" {
+variable "cluster_name" {
   type    = string
   default = null
 }
