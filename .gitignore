@@ -35,3 +35,4 @@ override.tf.json
 
 
 k8s_poc
+global_arch_main.log
