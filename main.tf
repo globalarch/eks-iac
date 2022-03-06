@@ -62,22 +62,26 @@ module "ap-southeast-1-mongo" {
 }
 
 module "us-west-2-eks" {
-  source       = "./modules/eks"
-  cluster_name = var.cluster_name
-  subnet_id    = module.us-west-2-infra.subnet.id
-  subnet_id_2  = module.us-west-2-infra.subnet_2.id
-  vpc_id       = module.us-west-2-infra.vpc.id
+  source              = "./modules/eks"
+  cluster_name        = var.cluster_name
+  subnet_id           = module.us-west-2-infra.subnet.id
+  subnet_id_2         = module.us-west-2-infra.subnet_2.id
+  vpc_id              = module.us-west-2-infra.vpc.id
+  availability_zone_1 = "us-west-2a"
+  availability_zone_2 = "us-west-2b"
   providers = {
     aws = aws.us-west-2
   }
 }
 
 module "ap-southeast-1-eks" {
-  source       = "./modules/eks"
-  cluster_name = var.cluster_name
-  subnet_id    = module.ap-southeast-1-infra.subnet.id
-  subnet_id_2  = module.ap-southeast-1-infra.subnet_2.id
-  vpc_id       = module.ap-southeast-1-infra.vpc.id
+  source              = "./modules/eks"
+  cluster_name        = var.cluster_name
+  subnet_id           = module.ap-southeast-1-infra.subnet.id
+  subnet_id_2         = module.ap-southeast-1-infra.subnet_2.id
+  vpc_id              = module.ap-southeast-1-infra.vpc.id
+  availability_zone_1 = "ap-southeast-1a"
+  availability_zone_2 = "ap-southeast-1b"
   providers = {
     aws = aws.ap-southeast-1
   }

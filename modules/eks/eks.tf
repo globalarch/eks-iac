@@ -22,8 +22,9 @@ module "eks" {
     }
   }
 
-  vpc_id     = var.vpc_id
-  subnet_ids = [var.subnet_id, var.subnet_id_2]
+  # vpc_id     = var.vpc_id
+  vpc_id     = aws_vpc.eks.id
+  subnet_ids = [aws_subnet.eks1.id, aws_subnet.eks2.id]
 
   eks_managed_node_groups = {
     default = {
@@ -35,7 +36,7 @@ module "eks" {
       max_size     = 5
       desired_size = 4
 
-      instance_types = ["m4.large"]
+      instance_types = ["t3.large"]
       capacity_type  = "ON_DEMAND"
     }
   }

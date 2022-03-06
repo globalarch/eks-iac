@@ -15,8 +15,8 @@ function mongodb {
 
 function slservices {
     STRING_MONGO="mongodb-rs-svc.mongodb.svc.cluster.local"
-    MONGOS_ORE_IP="10.1.1.22" #Private IP
-    MONGOS_SGP_IP="10.2.1.22" #Private IP
+    MONGOS_ORE_IP="" #Private IP
+    MONGOS_SGP_IP="" #Private IP
 
 
     K8S_POC_DIR="$(dirname ~/Documents/GitHub/k8s-poc/.)"
@@ -39,8 +39,7 @@ function slservices {
     
     
     ls -l
-    # cat ./k8s-poc/ephemeral-pods/eks_main_setup_script.sh | grep -e BRANCH -e BUILD
-    echo "Finished"
+
     grep -rl "$STRING_MONGO" "$(pwd)/k8s-poc" | xargs sed -i '' "s/$STRING_MONGO/$MONGOS_SGP_IP/g"
     cat ./k8s-poc/ephemeral-pods/config/properties/provisioned.yaml
     cd k8s-poc/ephemeral-pods
@@ -61,8 +60,7 @@ function slservices {
     cd ../..
     grep -rl "$MONGOS_ORE_IP" "$(pwd)/k8s-poc" | xargs sed -i '' "s/$MONGOS_ORE_IP/$STRING_MONGO/g"
     cat ./k8s-poc/ephemeral-pods/config/properties/provisioned.yaml
-
-
+    echo "Finished"
 }
 
 function reset_eks {
