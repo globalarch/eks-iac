@@ -29,13 +29,13 @@ module "eks" {
     default = {
       name                   = "default-node-group"
       create_launch_template = false
-      launch_template_name   = "" 
+      launch_template_name   = ""
 
       min_size     = 2
       max_size     = 5
       desired_size = 4
 
-      instance_types = ["t3.medium"]
+      instance_types = ["m4.large"]
       capacity_type  = "ON_DEMAND"
     }
   }
