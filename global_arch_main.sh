@@ -57,7 +57,7 @@ function slservices {
     cd k8s-poc/ephemeral-pods
     aws eks update-kubeconfig --region us-west-2 --name global-arch-tf   
     kubectl get pods
-    bash ./eks_main_setup_script.sh --all_2
+    bash ./eks_main_setup_script.sh --all
     cd ../..
     grep -rl "$MONGOS_ORE_IP" "$(pwd)/k8s-poc" | xargs sed -i '' "s/$MONGOS_ORE_IP/$STRING_MONGO/g"
     cat ./k8s-poc/ephemeral-pods/config/properties/provisioned.yaml

@@ -64,8 +64,8 @@ module "ap-southeast-1-mongo" {
 module "us-west-2-eks" {
   source       = "./modules/eks"
   cluster_name = var.cluster_name
-  subnet_id    = module.us-west-2-infra.subnet.id
-  subnet_id_2  = module.us-west-2-infra.subnet_2.id
+  subnet_id    = module.us-west-2-infra.subnet_2.id
+  subnet_id_2  = module.us-west-2-infra.subnet_3.id
   vpc_id       = module.us-west-2-infra.vpc.id
   providers = {
     aws = aws.us-west-2
@@ -75,8 +75,8 @@ module "us-west-2-eks" {
 module "ap-southeast-1-eks" {
   source       = "./modules/eks"
   cluster_name = var.cluster_name
-  subnet_id    = module.ap-southeast-1-infra.subnet.id
-  subnet_id_2  = module.ap-southeast-1-infra.subnet_2.id
+  subnet_id    = module.ap-southeast-1-infra.subnet_2.id
+  subnet_id_2  = module.ap-southeast-1-infra.subnet_3.id
   vpc_id       = module.ap-southeast-1-infra.vpc.id
   providers = {
     aws = aws.ap-southeast-1
@@ -89,6 +89,7 @@ module "us-west-2-infra" {
   ec2_key_name          = var.us_west_2_ec2_key_name
   private_subnet_cidr   = var.US_private_subnet
   private_subnet_cidr_2 = var.US_private_subnet_2
+  private_subnet_cidr_3 = var.US_private_subnet_3
   vpc_cidr              = var.US_vpc
   peer_vpc_cidr         = var.SGP_vpc
   nginx                 = var.US_nginx
@@ -107,6 +108,7 @@ module "ap-southeast-1-infra" {
   ec2_key_name          = var.ap_southeast_1_ec2_key_name
   private_subnet_cidr   = var.SGP_private_subnet
   private_subnet_cidr_2 = var.SGP_private_subnet_2
+  private_subnet_cidr_3 = var.SGP_private_subnet_3
   vpc_cidr              = var.SGP_vpc
   peer_vpc_cidr         = var.US_vpc
   nginx                 = var.SGP_nginx

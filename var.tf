@@ -41,6 +41,10 @@ variable "US_private_subnet_2" {
   type    = string
   default = "10.1.2.0/24"
 }
+variable "US_private_subnet_3" {
+  type    = string
+  default = "10.1.3.0/24"
+}
 
 variable "US_nginx" {
   type    = string
@@ -65,6 +69,11 @@ variable "SGP_mongo_private_ips" {
 variable "SGP_private_subnet_2" {
   type    = string
   default = "10.2.2.0/24"
+}
+
+variable "SGP_private_subnet_3" {
+  type    = string
+  default = "10.2.3.0/24"
 }
 
 variable "SGP_nginx" {

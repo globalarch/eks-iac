@@ -27,6 +27,11 @@ variable "private_subnet_cidr_2" {
   type    = string
   default = null
 }
+
+variable "private_subnet_cidr_3" {
+  type    = string
+  default = null
+}
 variable "nginx" {
   type    = string
   default = null
