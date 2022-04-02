@@ -14,9 +14,9 @@ function mongodb {
 }
 
 function slservices {
-    STRING_MONGO="mongodb-rs-svc.mongodb.svc.cluster.local"
-    MONGOS_ORE_IP="mongodb-rs-svc.mongodb.svc.cluster.local" #Private IP
-    MONGOS_SGP_IP="mongodb-rs-svc.mongodb.svc.cluster.local" #Private IP
+    export STRING_MONGO="mongodb-rs-svc.mongodb.svc.cluster.local"
+    MONGOS_ORE_IP="10.2.1.22" #Private IP
+    MONGOS_SGP_IP="10.2.1.22" #Private IP
 
 
     K8S_POC_DIR="$(dirname ~/Documents/GitHub/k8s-poc/.)"
@@ -41,6 +41,16 @@ function slservices {
     ls -l
     # cat ./k8s-poc/ephemeral-pods/eks_main_setup_script.sh | grep -e BRANCH -e BUILD
     echo "Finished"
+    grep -rl "$STRING_MONGO" "$(pwd)/k8s-poc" | xargs sed -i '' "s/$STRING_MONGO/$MONGOS_ORE_IP/g"
+    cat ./k8s-poc/ephemeral-pods/config/properties/provisioned.yaml
+    cd k8s-poc/ephemeral-pods
+    aws eks update-kubeconfig --region us-west-2 --name global-arch-tf   
+    kubectl get pods
+    bash ./eks_main_setup_script.sh --all
+    cd ../..
+    grep -rl "$MONGOS_ORE_IP" "$(pwd)/k8s-poc" | xargs sed -i '' "s/$MONGOS_ORE_IP/$STRING_MONGO/g"
+    cat ./k8s-poc/ephemeral-pods/config/properties/provisioned.yaml
+
     grep -rl "$STRING_MONGO" "$(pwd)/k8s-poc" | xargs sed -i '' "s/$STRING_MONGO/$MONGOS_SGP_IP/g"
     cat ./k8s-poc/ephemeral-pods/config/properties/provisioned.yaml
     cd k8s-poc/ephemeral-pods
@@ -52,15 +62,7 @@ function slservices {
     cat ./k8s-poc/ephemeral-pods/config/properties/provisioned.yaml
 
 
-    grep -rl "$STRING_MONGO" "$(pwd)/k8s-poc" | xargs sed -i '' "s/$STRING_MONGO/$MONGOS_ORE_IP/g"
-    cat ./k8s-poc/ephemeral-pods/config/properties/provisioned.yaml
-    cd k8s-poc/ephemeral-pods
-    aws eks update-kubeconfig --region us-west-2 --name global-arch-tf   
-    kubectl get pods
-    bash ./eks_main_setup_script.sh --all
-    cd ../..
-    grep -rl "$MONGOS_ORE_IP" "$(pwd)/k8s-poc" | xargs sed -i '' "s/$MONGOS_ORE_IP/$STRING_MONGO/g"
-    cat ./k8s-poc/ephemeral-pods/config/properties/provisioned.yaml
+
 
 
 }
