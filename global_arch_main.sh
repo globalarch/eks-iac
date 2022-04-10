@@ -18,7 +18,7 @@ function mongodb {
 function slservices {
     export STRING_MONGO="mongodb-rs-svc.mongodb.svc.cluster.local"
     MONGOS_ORE_IP="10.2.1.22" #Private IP
-    MONGOS_SGP_IP="10.2.1.22" #Private IP
+    MONGOS_SGP_IP="10.1.1.22" #Private IP
 
 
     K8S_POC_DIR="$(dirname ~/Documents/GitHub/k8s-poc/.)"
