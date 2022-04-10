@@ -9,7 +9,9 @@ function mongodb {
     terraform output -raw inventory > inventory
     chmod 700 ./private_keys/*.pem
 
-    ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i inventory './provisioning/main.yaml'
+    ANSIBLE_HOST_KEY_CHECKING=False \
+    ANSIBLE_FILTER_PLUGINS='./provisioning/plugin' \
+    ansible-playbook -i inventory './provisioning/main.yaml'
     echo "Finished"
 }
 

@@ -15,7 +15,7 @@
         ansible.builtin.set_fact:
           mongo_yaml: "{{ mongo_conf['content'] | b64decode | from_yaml }}"
 
-      - name: Edit config (us-west-2)
+      - name: Edit config (main at us-west-2)
         ansible.utils.update_fact:
           updates:
             - path: mongo_yaml.sharding
@@ -27,11 +27,11 @@
             - path: mongo_yaml.net.port
               value: 27018
         register: result_conf
-        when: inventory_hostname in groups['us-west-2']
+        when: (inventory_hostname in groups['us-west-2'][:-1]) or (inventory_hostname in groups['ap-southeast-1'][-1:])
       - ansible.builtin.set_fact: updated_conf="{{ result_conf['mongo_yaml'] }}"
         when: not ('skipped' in result_conf and result_conf['skipped']) and not ('failed' in result_conf and result_conf['failed'])
 
-      - name: Edit config (ap-southeast-1)
+      - name: Edit config (main at ap-southeast-1)
         ansible.utils.update_fact:
           updates:
             - path: mongo_yaml.sharding
@@ -43,7 +43,7 @@
             - path: mongo_yaml.net.port
               value: 27018
         register: result_conf
-        when: inventory_hostname in groups['ap-southeast-1']
+        when: (inventory_hostname in groups['ap-southeast-1'][:-1]) or (inventory_hostname in groups['us-west-2'][-1:])
       - ansible.builtin.set_fact: updated_conf="{{ result_conf['mongo_yaml'] }}"
         when: not ('skipped' in result_conf and result_conf['skipped']) and not ('failed' in result_conf and result_conf['failed'])
 

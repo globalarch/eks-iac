@@ -45,6 +45,8 @@ output "inventory" {
             "ap-southeast-1_1" = null
             "us-west-2_2"      = null
             "ap-southeast-1_2" = null
+            "us-west-2_3"      = null
+            "ap-southeast-1_3" = null
           }
         }
       }

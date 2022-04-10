@@ -32,8 +32,8 @@ provider "aws" {
 module "us-west-2-mongo" {
   source            = "./modules/mongo"
   ec2_key_name      = var.us_west_2_ec2_key_name
-  ec2_count         = 3
-  ec2_instance_type = "t3.micro"
+  ec2_count         = 4
+  ec2_instance_type = "t3.large"
   subnet_id         = module.us-west-2-infra.subnet.id
   vpc_id            = module.us-west-2-infra.vpc.id
   vpc_cidr          = var.US_vpc
@@ -48,8 +48,8 @@ module "us-west-2-mongo" {
 module "ap-southeast-1-mongo" {
   source            = "./modules/mongo"
   ec2_key_name      = var.ap_southeast_1_ec2_key_name
-  ec2_count         = 3
-  ec2_instance_type = "t2.micro"
+  ec2_count         = 4
+  ec2_instance_type = "t3.large"
   subnet_id         = module.ap-southeast-1-infra.subnet.id
   vpc_id            = module.ap-southeast-1-infra.vpc.id
   vpc_cidr          = var.SGP_vpc
@@ -67,6 +67,7 @@ module "us-west-2-eks" {
   subnet_id    = module.us-west-2-infra.subnet_2.id
   subnet_id_2  = module.us-west-2-infra.subnet_3.id
   vpc_id       = module.us-west-2-infra.vpc.id
+  ssh_key      = "ore-latest"
   providers = {
     aws = aws.us-west-2
   }
@@ -78,6 +79,7 @@ module "ap-southeast-1-eks" {
   subnet_id    = module.ap-southeast-1-infra.subnet_2.id
   subnet_id_2  = module.ap-southeast-1-infra.subnet_3.id
   vpc_id       = module.ap-southeast-1-infra.vpc.id
+  ssh_key      = "sgp-latest"
   providers = {
     aws = aws.ap-southeast-1
   }

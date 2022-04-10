@@ -12,7 +12,7 @@ resource "aws_security_group" "mongo" {
 
   ingress {
     from_port        = 27017
-    to_port          = 27019
+    to_port          = 27020
     protocol         = "tcp"
     cidr_blocks      = ["0.0.0.0/0"]
     ipv6_cidr_blocks = ["::/0"]

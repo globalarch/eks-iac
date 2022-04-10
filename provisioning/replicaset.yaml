@@ -22,6 +22,7 @@
                        join(',') }}"
           # TODO: use validation (by having an odd number of replicas)
           validate: no
+
   - hosts: us-west-2[1]
     become: yes
     tasks:
@@ -32,13 +33,21 @@
         community.mongodb.mongodb_replicaset:
           replica_set: us-west-2
           login_port: 27018
-          members: "{{ groups['us-west-2'][1:] |
-                       map('extract', hostvars) |
-                       map(attribute='ec2_private_ip') |
-                       map('regex_replace', '^(.*)$', '\\1:27018') |
-                       join(',') }}"
-          # TODO: use validation (by having an odd number of replicas)
-          validate: no
+          members: "{{ (
+                        groups['us-west-2'][1:-1] |
+                        map('extract', hostvars) |
+                        map(attribute='ec2_private_ip') |
+                        map('regex_replace', '^(.*)$', '\\1:27018') |
+                        map('host2dict', 1)
+                       ) + (
+                        groups['ap-southeast-1'][-1:] |
+                        map('extract', hostvars) |
+                        map(attribute='ec2_private_ip') |
+                        map('regex_replace', '^(.*)$', '\\1:27018') |
+                        map('host2dict', 0)
+                       )
+                    }}"
+
   - hosts: ap-southeast-1[1]
     become: yes
     tasks:
@@ -49,10 +58,17 @@
         community.mongodb.mongodb_replicaset:
           replica_set: ap-southeast-1
           login_port: 27018
-          members: "{{ groups['ap-southeast-1'][1:] |
-                       map('extract', hostvars) |
-                       map(attribute='ec2_private_ip') |
-                       map('regex_replace', '^(.*)$', '\\1:27018') |
-                       join(',') }}"
-          # TODO: use validation (by having an odd number of replicas)
-          validate: no
+          members: "{{ (
+                        groups['ap-southeast-1'][1:-1] |
+                        map('extract', hostvars) |
+                        map(attribute='ec2_private_ip') |
+                        map('regex_replace', '^(.*)$', '\\1:27018') |
+                        map('host2dict', 1)
+                       ) + (
+                        groups['us-west-2'][-1:] |
+                        map('extract', hostvars) |
+                        map(attribute='ec2_private_ip') |
+                        map('regex_replace', '^(.*)$', '\\1:27018') |
+                        map('host2dict', 0)
+                       )
+                    }}"

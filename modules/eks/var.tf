@@ -17,3 +17,8 @@ variable "vpc_id" {
   type    = string
   default = null
 }
+
+variable "ssh_key" {
+  type    = string
+  default = null
+}
