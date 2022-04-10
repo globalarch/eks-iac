@@ -1,4 +1,5 @@
 #python3
+import json
 import sys
 import time
 import os
@@ -12,7 +13,6 @@ except ImportError:
     os.system('pip3 install pymongo')
 
 from pymongo import MongoClient
-from pymongo.read_preferences import Nearest
 
 class Util:
     @staticmethod
