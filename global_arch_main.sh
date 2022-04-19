@@ -1,10 +1,9 @@
 #!/bin/bash
 
 function mongodb {
-    echo "Preparing dependency..."
-    echo "Finished"
-
+    echo "==========================================================="
     echo "Installing and configuring MongoDB onto instances..."
+    echo "==========================================================="
     rm inventory
     terraform output -raw inventory > inventory
     chmod 700 ./private_keys/*.pem
@@ -42,28 +41,29 @@ function slservices {
     
     ls -l
     # cat ./k8s-poc/ephemeral-pods/eks_main_setup_script.sh | grep -e BRANCH -e BUILD
-    echo "Finished"
+    echo "==========================================================="
+    echo "[EKS] Deploying us-west-2 cluster"
+    echo "==========================================================="
     grep -rl "$STRING_MONGO" "$(pwd)/k8s-poc" | xargs sed -i '' "s/$STRING_MONGO/$MONGOS_ORE_IP/g"
-    cat ./k8s-poc/ephemeral-pods/config/properties/provisioned.yaml
     cd k8s-poc/ephemeral-pods
     aws eks update-kubeconfig --region us-west-2 --name global-arch-tf   
-    kubectl get pods
     bash ./eks_main_setup_script.sh --all
     cd ../..
     grep -rl "$MONGOS_ORE_IP" "$(pwd)/k8s-poc" | xargs sed -i '' "s/$MONGOS_ORE_IP/$STRING_MONGO/g"
-    cat ./k8s-poc/ephemeral-pods/config/properties/provisioned.yaml
 
+    echo "==========================================================="
+    echo "[EKS] Deploying ap-southeast-1 follow-up cluster"
+    echo "==========================================================="
     grep -rl "$STRING_MONGO" "$(pwd)/k8s-poc" | xargs sed -i '' "s/$STRING_MONGO/$MONGOS_SGP_IP/g"
-    cat ./k8s-poc/ephemeral-pods/config/properties/provisioned.yaml
     cd k8s-poc/ephemeral-pods
     aws eks update-kubeconfig --region ap-southeast-1 --name global-arch-tf
-    kubectl get pods
     bash ./eks_main_setup_script.sh --all_2
     cd ../..
     grep -rl "$MONGOS_SGP_IP" "$(pwd)/k8s-poc" | xargs sed -i '' "s/$MONGOS_SGP_IP/$STRING_MONGO/g"
-    cat ./k8s-poc/ephemeral-pods/config/properties/provisioned.yaml
 
-    echo "Moving all primary replica to us-west-2"
+    echo "==========================================================="
+    echo "[MONGO] Moving all primary replica to us-west-2"
+    echo "==========================================================="
     cd ..
     export MONGO_SGP_IP=$(echo $(ansible -i inventory ap-southeast-1_1 -m debug -a "msg=<EOF>{{ hostvars[inventory_hostname].ansible_host }}<EOF>") |  sed -e 's/.*<EOF>\(.*\)<EOF>.*/\1/')
     mongo $MONGO_SGP_IP <<EOF 
