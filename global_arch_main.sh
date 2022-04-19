@@ -17,13 +17,13 @@ function mongodb {
 
 function slservices {
     export STRING_MONGO="mongodb-rs-svc.mongodb.svc.cluster.local"
-    MONGOS_ORE_IP="10.2.1.22" #Private IP
-    MONGOS_SGP_IP="10.1.1.22" #Private IP
+    MONGOS_ORE_IP="10.1.1.22" #Private IP
+    MONGOS_SGP_IP="10.2.1.22" #Private IP
 
 
     K8S_POC_DIR="$(dirname ~/Documents/GitHub/k8s-poc/.)"
     export BRANCH='4.global_arch_prod'
-    export BUILD=11367
+    export BUILD=11995
 
     echo "Cloning configuration scripts..."
     rm -rf k8s_poc
@@ -58,15 +58,19 @@ function slservices {
     cd k8s-poc/ephemeral-pods
     aws eks update-kubeconfig --region ap-southeast-1 --name global-arch-tf
     kubectl get pods
-    bash ./eks_main_setup_script.sh --all
+    bash ./eks_main_setup_script.sh --all_2
     cd ../..
     grep -rl "$MONGOS_SGP_IP" "$(pwd)/k8s-poc" | xargs sed -i '' "s/$MONGOS_SGP_IP/$STRING_MONGO/g"
     cat ./k8s-poc/ephemeral-pods/config/properties/provisioned.yaml
 
-
-
-
-
+    echo "Moving all primary replica to us-west-2"
+    cd ..
+    export MONGO_SGP_IP=$(echo $(ansible -i inventory ap-southeast-1_1 -m debug -a "msg=<EOF>{{ hostvars[inventory_hostname].ansible_host }}<EOF>") |  sed -e 's/.*<EOF>\(.*\)<EOF>.*/\1/')
+    mongo $MONGO_SGP_IP <<EOF 
+db.adminCommand({listDatabases: 1, nameOnly: true }).databases.map(x => x.name).forEach(x => db.adminCommand( { movePrimary: x, to: "us-west-2" } ))
+EOF
+    unset MONGO_SGP_IP
+    echo "Finished"
 }
 
 function reset_eks {
