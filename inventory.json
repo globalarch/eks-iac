@@ -1,0 +1,53 @@
+"all":
+  "children":
+    "ap-southeast-1":
+      "hosts":
+        "ap-southeast-1_0":
+          "ansible_host": "54.255.137.55"
+          "ansible_ssh_private_key_file": "./private_keys/terraform-cloud-ap-southeast-1.pem"
+          "ec2_private_ip": "10.2.1.20"
+        "ap-southeast-1_1":
+          "ansible_host": "54.151.154.106"
+          "ansible_ssh_private_key_file": "./private_keys/terraform-cloud-ap-southeast-1.pem"
+          "ec2_private_ip": "10.2.1.21"
+        "ap-southeast-1_2":
+          "ansible_host": "13.215.194.150"
+          "ansible_ssh_private_key_file": "./private_keys/terraform-cloud-ap-southeast-1.pem"
+          "ec2_private_ip": "10.2.1.22"
+        "ap-southeast-1_3":
+          "ansible_host": "13.215.174.185"
+          "ansible_ssh_private_key_file": "./private_keys/terraform-cloud-ap-southeast-1.pem"
+          "ec2_private_ip": "10.2.1.23"
+    "config-server":
+      "hosts":
+        "ap-southeast-1_0": null
+        "us-west-2_0": null
+    "shard":
+      "hosts":
+        "ap-southeast-1_1": null
+        "ap-southeast-1_2": null
+        "ap-southeast-1_3": null
+        "us-west-2_1": null
+        "us-west-2_2": null
+        "us-west-2_3": null
+    "us-west-2":
+      "hosts":
+        "us-west-2_0":
+          "ansible_host": "18.236.89.60"
+          "ansible_ssh_private_key_file": "./private_keys/terraform-cloud-us-west-2.pem"
+          "ec2_private_ip": "10.1.1.20"
+        "us-west-2_1":
+          "ansible_host": "52.10.27.4"
+          "ansible_ssh_private_key_file": "./private_keys/terraform-cloud-us-west-2.pem"
+          "ec2_private_ip": "10.1.1.21"
+        "us-west-2_2":
+          "ansible_host": "54.190.37.31"
+          "ansible_ssh_private_key_file": "./private_keys/terraform-cloud-us-west-2.pem"
+          "ec2_private_ip": "10.1.1.22"
+        "us-west-2_3":
+          "ansible_host": "34.216.140.119"
+          "ansible_ssh_private_key_file": "./private_keys/terraform-cloud-us-west-2.pem"
+          "ec2_private_ip": "10.1.1.23"
+  "vars":
+    "ansible_python_interpreter": "/usr/bin/python2"
+    "ansible_user": "ubuntu"

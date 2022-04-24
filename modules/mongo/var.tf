@@ -49,3 +49,18 @@ variable "peer_vpc_cidr" {
 variable "private_ips" {
   default = {}
 }
+
+variable "SGP_vpc" {
+  type     = string
+  nullable = false
+}
+
+variable "US_vpc" {
+  type     = string
+  nullable = false
+}
+
+variable "debug_cidr" {
+  type     = string
+  nullable = false
+}

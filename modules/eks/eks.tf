@@ -9,8 +9,8 @@ module "eks" {
   create_node_security_group    = false
   create_cluster_security_group = false
 
-  node_security_group_id    = aws_security_group.node.id
-  cluster_security_group_id = aws_security_group.cluster.id
+  # node_security_group_id    = aws_security_group.node.id
+  # cluster_security_group_id = aws_security_group.cluster.id
 
   cluster_addons = {
     coredns = {
@@ -37,6 +37,25 @@ module "eks" {
 
       instance_types = ["t3.large"]
       capacity_type  = "ON_DEMAND"
+
+      # cluster_primary_security_group_id = aws_security_group.cluster.id
+      create_security_group    = true
+
+      security_group_name = "Allow whitelisted and private only"
+      security_group_rules = [{
+        type        = "ingress"
+        from_port   = 0
+        to_port     = 0
+        protocol    = "-1"
+        cidr_blocks = [var.US_vpc, var.SGP_vpc, var.debug_cidr]
+        }, {
+        type             = "egress"
+        from_port        = 0
+        to_port          = 0
+        protocol         = "-1"
+        cidr_blocks      = ["0.0.0.0/0"]
+        ipv6_cidr_blocks = ["::/0"]
+      }]
     }
   }
 }
