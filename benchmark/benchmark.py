@@ -14,12 +14,11 @@ class StupidLog:
     def __init__(self, enabled):
         self.enabled = enabled
         
-    def log(self, msg, force_flag=None):
-        if force_flag is not None:
-            if force_flag:
-                print(msg)
-            return
-        if self.enabled:
+    def log(self, msg, override_enable=None):
+        enabled = self.enabled
+        if override_enable is not None:
+            enabled = override_enable
+        if enabled:
             print(msg)
         
 class Benchmark:
