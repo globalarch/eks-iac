@@ -1,7 +1,7 @@
 #!/bin/bash
 
 BRANCH='4.global_arch_prod'
-BUILD=11995
+BUILD=12007
 
 
 #Login 

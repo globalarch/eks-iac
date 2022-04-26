@@ -22,7 +22,7 @@ function slservices {
 
     K8S_POC_DIR="$(dirname ~/Documents/GitHub/k8s-poc/.)"
     export BRANCH='4.global_arch_prod'
-    export BUILD=11995
+    export BUILD=12007
 
     echo "Cloning configuration scripts..."
     rm -rf k8s_poc
