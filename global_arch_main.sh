@@ -20,7 +20,7 @@ function slservices {
     MONGOS_SGP_IP="10.2.1.22" #Private IP
 
 
-    K8S_POC_DIR="$(dirname ~/snaplogic/k8s-poc/.)"
+    K8S_POC_DIR=""
     export BRANCH='4.global_arch_prod'
     export BUILD=12007
 
