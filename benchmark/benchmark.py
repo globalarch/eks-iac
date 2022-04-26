@@ -8,6 +8,7 @@ except ImportError:
     print('''pymongo not exist, please install
                 pip3 install pymongo
           ''')
+    exit(1234)
 
 class StupidLog:
     def __init__(self, enabled):
@@ -22,7 +23,7 @@ class StupidLog:
             print(msg)
         
 class Benchmark:
-    def __init__(self, db, mongo_client: MongoClient, log: StupidLog, doc_size=100, doc_count=10, region=None, find_region=None):
+    def __init__(self, db, mongo_client: MongoClient, log: StupidLog, doc_size=100, doc_count=10, insert_region=None, find_region=None):
         self.client = mongo_client
         self.db = self.client[db]
         self.doc_col = self.db.doc
@@ -30,7 +31,7 @@ class Benchmark:
         
         self.DOC_SIZE = doc_size
         self.DOC_COUNT = doc_count
-        self.region = region
+        self.insert_region = insert_region
         self.find_region = find_region
 
         self.ENABLE_LOG = False
@@ -40,7 +41,7 @@ class Benchmark:
         return {"doc":dict([("0",1) for _ in range(self.DOC_SIZE//60)])}
 
     def insert(self):
-        region = self.region
+        region = self.insert_region
         '''
         {
             _id: *
@@ -98,12 +99,12 @@ class Benchmark:
         doc_find_time = self.find()
         
         doc_insert_time,doc_find_time = round(doc_insert_time, 5),round(doc_find_time, 5)
-        return {"DOC_SIZE":self.DOC_SIZE, "DOC_COUNT":self.DOC_COUNT, "DOC_INSERT_TIME":doc_insert_time, "DOC_FIND_TIME":doc_find_time, "REGION": self.region}
+        return {"DOC_SIZE":self.DOC_SIZE, "DOC_COUNT":self.DOC_COUNT, "DOC_INSERT_TIME":doc_insert_time, "DOC_FIND_TIME":doc_find_time, "REGION": self.insert_region}
     
 
 if __name__ == '__main__':
     USAGE = 'python3 benchmark.py <MONGODB_IP> <DB_NAME> <REGION>'
-    if len(sys.argv) < 3:
+    if len(sys.argv) < 4:
         print(f"[ERROR] INVALID ARGRUMENTS\nUSAGE:\n    {USAGE}")
         exit(1)
 
@@ -117,8 +118,8 @@ if __name__ == '__main__':
         b = Benchmark(db, client, StupidLog(True), 
                       doc_size=doc_size, 
                       doc_count=20, 
-                      region=region,
-                      find_region=None
+                      insert_region=region,
+                      find_region=region
                       )
         result = b.run()
         collect.append(result)
