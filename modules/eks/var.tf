@@ -22,3 +22,18 @@ variable "ssh_key" {
   type    = string
   default = null
 }
+
+variable "debug_cidr" {
+  type     = string
+  nullable = false
+}
+
+variable "SGP_vpc" {
+  type     = string
+  nullable = false
+}
+
+variable "US_vpc" {
+  type     = string
+  nullable = false
+}

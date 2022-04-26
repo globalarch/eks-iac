@@ -40,6 +40,10 @@ module "us-west-2-mongo" {
   peer_vpc_cidr     = var.SGP_vpc
   private_ips       = var.US_mongo_private_ips
 
+  US_vpc     = var.US_vpc
+  SGP_vpc    = var.SGP_vpc
+  debug_cidr = var.debug_cidr
+
   providers = {
     aws = aws.us-west-2
   }
@@ -56,6 +60,10 @@ module "ap-southeast-1-mongo" {
   peer_vpc_cidr     = var.US_vpc
   private_ips       = var.SGP_mongo_private_ips
 
+  US_vpc     = var.US_vpc
+  SGP_vpc    = var.SGP_vpc
+  debug_cidr = var.debug_cidr
+
   providers = {
     aws = aws.ap-southeast-1
   }
@@ -68,6 +76,10 @@ module "us-west-2-eks" {
   subnet_id_2  = module.us-west-2-infra.subnet_3.id
   vpc_id       = module.us-west-2-infra.vpc.id
   ssh_key      = "ore-latest"
+
+  US_vpc     = var.US_vpc
+  SGP_vpc    = var.SGP_vpc
+  debug_cidr = var.debug_cidr
   providers = {
     aws = aws.us-west-2
   }
@@ -80,6 +92,10 @@ module "ap-southeast-1-eks" {
   subnet_id_2  = module.ap-southeast-1-infra.subnet_3.id
   vpc_id       = module.ap-southeast-1-infra.vpc.id
   ssh_key      = "sgp-latest"
+
+  US_vpc     = var.US_vpc
+  SGP_vpc    = var.SGP_vpc
+  debug_cidr = var.debug_cidr
   providers = {
     aws = aws.ap-southeast-1
   }

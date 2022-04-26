@@ -20,7 +20,7 @@ function slservices {
     MONGOS_SGP_IP="10.2.1.22" #Private IP
 
 
-    K8S_POC_DIR="$(dirname ~/Documents/GitHub/k8s-poc/.)"
+    K8S_POC_DIR="$(dirname ~/snaplogic/k8s-poc/.)"
     export BRANCH='4.global_arch_prod'
     export BUILD=12007
 
@@ -136,6 +136,8 @@ function main() {
 		reset_eks
 	fi
 }
+
+
 
 parse_options $@
 gimme-aws-creds && export $(cat ~/.aws/credentials | tr -d "[:blank:]" | head -4 | tail -3)

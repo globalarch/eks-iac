@@ -105,3 +105,8 @@ variable "cluster_name" {
   type    = string
   default = "global-arch-tf"
 }
+
+variable "debug_cidr" {
+  type    = string
+  default = "49.228.194.133/32"
+}
