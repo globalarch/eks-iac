@@ -1,5 +1,17 @@
 #!/bin/bash
 
+
+#helpers
+function replace_string {
+    echo "++++++++"
+    echo "Replacing ${1} to ${2} in directory ${3}"
+    echo "++++++++"
+
+    grep -rl "${1}" "${3}" | xargs sed -i '' "s/${1}/${2}/g"
+    cat ./k8s-poc/ephemeral-pods/config/properties/provisioned.yaml
+}
+
+
 function mongodb {
     echo "==========================================================="
     echo "Installing and configuring MongoDB onto instances..."
@@ -38,28 +50,26 @@ function slservices {
         cp -r $K8S_POC_DIR .
     fi
     
-    
-    ls -l
     # cat ./k8s-poc/ephemeral-pods/eks_main_setup_script.sh | grep -e BRANCH -e BUILD
     echo "==========================================================="
     echo "[EKS] Deploying us-west-2 cluster"
     echo "==========================================================="
-    grep -rl "$STRING_MONGO" "$(pwd)/k8s-poc" | xargs sed -i '' "s/$STRING_MONGO/$MONGOS_ORE_IP/g"
+    replace_string $STRING_MONGO $MONGOS_ORE_IP "$(pwd)/k8s-poc"
     cd k8s-poc/ephemeral-pods
     aws eks update-kubeconfig --region us-west-2 --name global-arch-tf   
     bash ./eks_main_setup_script.sh --all
     cd ../..
-    grep -rl "$MONGOS_ORE_IP" "$(pwd)/k8s-poc" | xargs sed -i '' "s/$MONGOS_ORE_IP/$STRING_MONGO/g"
+    replace_string $MONGOS_ORE_IP $STRING_MONGO "$(pwd)/k8s-poc"
 
     echo "==========================================================="
     echo "[EKS] Deploying ap-southeast-1 follow-up cluster"
     echo "==========================================================="
-    grep -rl "$STRING_MONGO" "$(pwd)/k8s-poc" | xargs sed -i '' "s/$STRING_MONGO/$MONGOS_SGP_IP/g"
+    replace_string $STRING_MONGO $MONGOS_SGP_IP "$(pwd)/k8s-poc"
     cd k8s-poc/ephemeral-pods
     aws eks update-kubeconfig --region ap-southeast-1 --name global-arch-tf
     bash ./eks_main_setup_script.sh --all_2
     cd ../..
-    grep -rl "$MONGOS_SGP_IP" "$(pwd)/k8s-poc" | xargs sed -i '' "s/$MONGOS_SGP_IP/$STRING_MONGO/g"
+    replace_string $MONGOS_SGP_IP $STRING_MONGO "$(pwd)/k8s-poc"
 
     echo "==========================================================="
     echo "[MONGO] Moving all primary replica to us-west-2"
