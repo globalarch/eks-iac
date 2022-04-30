@@ -1,8 +1,6 @@
 resource "aws_security_group" "mongo" {
   vpc_id = var.vpc_id
-  name   = "mongo"
-
-  //TODO: add whitelist debug ip + EKS
+  name   = "mongo-${random_string.suffix.result}"
 
   ingress {
     description = "allow private subnets"
@@ -16,7 +14,7 @@ resource "aws_security_group" "mongo" {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
-    cidr_blocks = [var.debug_cidr]
+    cidr_blocks = var.debug_cidrs
   }
   egress {
     from_port        = 0

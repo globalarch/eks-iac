@@ -31,8 +31,8 @@ function slservices {
     MONGOS_ORE_IP="10.1.1.22" #Private IP
     MONGOS_SGP_IP="10.2.1.22" #Private IP
 
-
-    K8S_POC_DIR=""
+    #PLEASE POINT TO THE k8s-poc location
+    K8S_POC_DIR="$(dirname ~/Documents/GitHub/k8s-poc/.)"
     export BRANCH='4.global_arch_prod'
     export BUILD=12007
 
@@ -77,6 +77,14 @@ function slservices {
     cd ..
     export MONGO_SGP_IP=$(echo $(ansible -i inventory ap-southeast-1_1 -m debug -a "msg=<EOF>{{ hostvars[inventory_hostname].ansible_host }}<EOF>") |  sed -e 's/.*<EOF>\(.*\)<EOF>.*/\1/')
     mongo $MONGO_SGP_IP <<EOF 
+use slserver
+db.pm.pipeline_rt.createIndex({"ga_region": 1, "_id": "hashed"})
+sh.enableSharding("slserver")
+sh.shardCollection("slserver.pm.pipeline_rt", {"ga_region": 1, "_id": "hashed"})
+sh.addShardTag("us-west-2", "oregon")
+sh.addShardTag("ap-southeast-1", "singapore")
+sh.addTagRange("slserver.pm.pipeline_rt", {"ga_region": "oregon", "_id": MinKey}, {"ga_region": "oregon", "_id": MaxKey}, "oregon")
+sh.addTagRange("slserver.pm.pipeline_rt", {"ga_region": "singapore", "_id": MinKey}, {"ga_region": "singapore", "_id": MaxKey}, "singapore")
 db.adminCommand({listDatabases: 1, nameOnly: true }).databases.map(x => x.name).forEach(x => db.adminCommand( { movePrimary: x, to: "us-west-2" } ))
 EOF
     unset MONGO_SGP_IP

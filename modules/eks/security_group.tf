@@ -15,7 +15,7 @@
 #     from_port        = 0
 #     to_port          = 0
 #     protocol         = "-1"
-#     cidr_blocks      = [var.debug_cidr]
+#     cidr_blocks      = var.debug_cidrs
 #   }
 
 
@@ -46,7 +46,7 @@
 #     from_port        = 0
 #     to_port          = 0
 #     protocol         = "-1"
-#     cidr_blocks      = [var.debug_cidr]
+#     cidr_blocks      = var.debug_cidrs
 #   }
 
 #   egress {

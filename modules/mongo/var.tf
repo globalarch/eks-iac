@@ -60,7 +60,7 @@ variable "US_vpc" {
   nullable = false
 }
 
-variable "debug_cidr" {
-  type     = string
+variable "debug_cidrs" {
+  type     = list(any)
   nullable = false
 }

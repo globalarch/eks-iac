@@ -106,7 +106,8 @@ variable "cluster_name" {
   default = "global-arch-tf"
 }
 
-variable "debug_cidr" {
-  type    = string
-  default = "49.228.194.133/32"
+variable "debug_cidrs" {
+  type = list(any)
+              #peem's static ip     #oregon-last-resort-eip
+  default = ["124.120.245.173/32", "44.240.166.57/32", "58.8.64.252/32"]
 }

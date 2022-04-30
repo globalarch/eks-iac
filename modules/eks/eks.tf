@@ -6,11 +6,6 @@ module "eks" {
   cluster_endpoint_private_access = true
   cluster_endpoint_public_access  = true
 
-  create_node_security_group    = false
-  create_cluster_security_group = false
-
-  # node_security_group_id    = aws_security_group.node.id
-  # cluster_security_group_id = aws_security_group.cluster.id
 
   cluster_addons = {
     coredns = {
@@ -39,7 +34,7 @@ module "eks" {
       capacity_type  = "ON_DEMAND"
 
       # cluster_primary_security_group_id = aws_security_group.cluster.id
-      create_security_group    = true
+      create_security_group = true
 
       security_group_name = "Allow whitelisted and private only"
       security_group_rules = [{
@@ -47,7 +42,7 @@ module "eks" {
         from_port   = 0
         to_port     = 0
         protocol    = "-1"
-        cidr_blocks = [var.US_vpc, var.SGP_vpc, var.debug_cidr]
+        cidr_blocks = concat([var.US_vpc, var.SGP_vpc], var.debug_cidrs)
         }, {
         type             = "egress"
         from_port        = 0

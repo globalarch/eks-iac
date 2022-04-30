@@ -23,8 +23,8 @@ variable "ssh_key" {
   default = null
 }
 
-variable "debug_cidr" {
-  type     = string
+variable "debug_cidrs" {
+  type     = list(any)
   nullable = false
 }
 
