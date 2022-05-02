@@ -50,7 +50,6 @@ function slservices {
         cp -r $K8S_POC_DIR .
     fi
     
-    # cat ./k8s-poc/ephemeral-pods/eks_main_setup_script.sh | grep -e BRANCH -e BUILD
     echo "==========================================================="
     echo "[EKS] Deploying us-west-2 cluster"
     echo "==========================================================="
@@ -102,9 +101,10 @@ function reset_eks {
 }
 
 function reset_mongo {
-    terraform destroy -auto-approve -target="module.us-west-2-mongo" -target="module.ap-southeast-1-mongo" && \
-    terraform apply -auto-approve -target="module.us-west-2-mongo" -target="module.ap-southeast-1-mongo" && \
-    mongodb
+    echo "NO LONGER USE"
+    # terraform destroy -auto-approve -target="module.us-west-2-mongo" -target="module.ap-southeast-1-mongo" && \
+    # terraform apply -auto-approve -target="module.us-west-2-mongo" -target="module.ap-southeast-1-mongo" && \
+    # mongodb
 }
 
 parse_options() {

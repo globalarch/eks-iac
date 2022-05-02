@@ -1,6 +1,6 @@
 resource "aws_security_group" "mongo" {
   vpc_id = var.vpc_id
-  name   = "mongo-${random_string.suffix.result}"
+  name   = "mongo"
 
   ingress {
     description = "allow private subnets"

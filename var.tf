@@ -108,6 +108,6 @@ variable "cluster_name" {
 
 variable "debug_cidrs" {
   type = list(any)
-              #peem's static ip     #oregon-last-resort-eip
-  default = ["124.120.245.173/32", "44.240.166.57/32", "58.8.64.252/32"]
+  #           peem's static ip  #ore-last-resort-eip  #sgp-last-resort-eip
+  default = ["172.94.32.105/32", "44.240.166.57/32", "13.250.133.173/32"]
 }
